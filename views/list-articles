@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Virtual Closet: Articles</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <a href="/"><h1>Virtual Closet</h1></a>
+    <% if (items.length > 0) { %>
+    <ul>
+      <% items.forEach(function(item) { %>
+      <li><a href="/articles/<%=item._id%>"><%=item.name%></a></li>
+      <% }); %>
+    </ul>
+    <% } else { %>
+    <div>No articles found.</div>
+    <% } %>
+    <div class="control">
+      <h2>Search for articles by name</h2>
+      <form method="get" action="/articles/">
+        <label>Article name: <input name="name"></label>
+        <button>Search</button>
+      </form>
+    </div>
+  </body>
+</html>
