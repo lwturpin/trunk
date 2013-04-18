@@ -31,9 +31,18 @@
         <% } %>
       </dd>
     </dl>
-    <div class="control">
+
+<li>
+    <div class="title"><a rel="article" href="article.html">Color Block V Dress</a></div>
+  	<div class="description">Long Blue Ivory and Red Color Block V-neck Dress</div>
+  	<div class="designer">Andree</div>
+  	<div class="color">blue</div>
+  	<div class="inventory">item2</div>
+  </li>    
+
+<div class="control">
       <h2>Add a new article</h2>
-      <form id="create-article" method="post" action="/articles/">
+      <form id="create-article" method="post" action="/list-articles/">
         <input type="hidden" name="item[article]" value="<%=item._id%>">
         <!-- The line above links the article to be created to this user's closet. -->
         <label>Article name: 
