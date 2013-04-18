@@ -17,9 +17,20 @@
     <% } %>
     <div class="control">
       <h2>Search for articles by name</h2>
-      <form method="get" action="/articles/">
+      <form method="get" action="/list-articles/">
         <label>Article name: <input name="name"></label>
         <button>Search</button>
+      </form>
+    </div>
+
+    <div class="add">
+      <h2>Add an article</h2>
+      <form method="post" action="/list-articles/">
+        <label>Article name: <input name="name" type="text"/></label>
+        <label>Description: <input description="description" type="text"/></label>
+        <label>Brand: <input brand="brand" type="text"/></label>
+        <label>Color: <input color="color" type="text"/></label>
+        <input type="submit"/>
       </form>
     </div>
   </body>
