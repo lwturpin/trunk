@@ -9,7 +9,7 @@
 <div itemscope itemtype="http://schema.org/Product">
   <dl>
       <dt><span itemprop="name">Name</span></dt>
-      <dd><a href="/articles/<%=item.article%>"><%=item.article%></a></dd>
+      <dd><a href="/list-articles/<%=item.article%>"><%=item.article%></a></dd>
       <dt><span itemprop="description">Description</span></dt>
       <dd><%=item.description%></dd>
       <dt><span itemprop="brand">Brand</span></dt>
@@ -25,7 +25,7 @@
 
 <div class="control">
       <h2>Update article</h2>
-      <form method="put" action="/articles/<%=item._id%>">
+      <form method="put" action="/list-articles/<%=item._id%>">
         <label>Name: 
           <input name="item[name]" value="<%=item.name%>" type="text" required>
         </label>
