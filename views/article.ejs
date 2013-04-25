@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <title>Trunk: <%=item.name%></title>
+    <link rel="stylesheet" href="/style.css">
+ </head>
+<body>
+
+<a href="/"><h1>Article</h1></a>
+<dl>
+    <dt>Name</dt>
+    <dd><%=item.name%></dd>
+    <dt>Article</dt>
+    <dd><a href="/allitems/<%=item.article%>"><%=item.article%></a></dd>
+    <% if (item.image) { %>
+    <dt>Image URL</dt>
+    <dd><img src="<%=item.image%>" alt"<%=item.name%>"></dd>
+    <% } %>
+</dl>
+<div itemscope itemtype="http://schema.org/Product">
+  ID: <span itemprop="productID">1</span></br>
+  Name: <span itemprop="name">Red Rabble Sneaker</span></br>
+  Description: <span itemprop="description">Rabble Mid-Top Canvas Sneaker</span></br>
+  Brand: <span itemprop="brand"><a href="www.alexandermcqeen.com">Alexander McQueen</a></span></br>
+  Color: <span itemprop="color">Red</span></br>
+</div>
+
+<h3>Owners</h3>
+<div itemscope itemtype="http://schema.org/Thing">
+  <a rel="user" href="user/{username}.html"><span class="username">lwturpin</span></a></br>
+  <a rel="user" href="user/{username}.html"><span class="username">rshaw</span></a>
+</div>
+
+
+
+</body>
+</html>
+
