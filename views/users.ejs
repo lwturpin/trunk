@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trunk: Users</title>
+    <link rel="stylesheet" href="/style.css"
+</head>
+
+<body>
+    <a href="/"><h1>All Users</h1></a>
+    <% if (items.length > 0) { %>
+    <ul>
+        <% items.forEach(function(item) { %>
+        <li><a href="/users/<%=item._id%>"><%=item.name%></a></li>
+        <% }); %>
+    </ul>
+    <% } else { %>
+    <div>No Users found.</div>
+    <% } %>
+    <div class="control">
+        <h2>Search for users by name</h2>
+        <form method="get" action="/users">
+            <label>User Name: <input name="name"></label>
+            <button>Search</button>
+        </form>
+    </div>
+<ul class="all">
+  <li>
+    <div class="user">
+      User Name: <a rel="user" href="user.html"><span class="username">rybesh</span></a>
+      <button type="button" onclick="alert('This user has been removed')">Remove User
+      </button>
+      <!-- other relevant user info can go here -->
+      <!-- create a delete button -->
+    </div>
+  </li>
+  <li>
+    <div class="user">
+      User Name: <a rel="user" href="user.html"><span class="username">lturpin</span></a>
+      <button type="button" onclick="alert('This user has been removed')">Remove User
+      </button>
+      <!-- other relevant user info can go here -->
+    </div>
+  </li>
+</ul>
+
+<h2>Add a New User</h2>
+<form>
+    <form method="post" action="users/">
+    Username: <input type="text" name="username"></br>
+    Name: <input type="text" name="name"></br>
+    Email: <input type="text" name="email"></br>
+    Password: <input type="text" name="password"></br>
+    <input type="submit">
+</form>
+
+</body>
+</html>
