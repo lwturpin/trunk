@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Trunk: <%item.name%></title>
+  <link rel="stylesheet" href="/style.css">
+ </head>
+<body>
+
+<a href="/"><h1>User Information</h1></a>
+<dl>
+    <dt>User Name</dt>
+    <dd><%=item.name%></dd>
+    <% if (item.description) { %>
+    <dt>Description</dt>
+    <dd><%=item.description%></dd>
+    <% } %>
+    <dt>Articles</dt>
+    
+    <dd>
+        <% if (related_tems.length > 0) { %>
+        <ul>
+        <% related_items.forEach(function(related_item) { %>
+        <li>
+            <a href="/allitems/<%=related_item._id%>">
+                <%=related_item.name%>
+            </a>
+        </li>
+        <% }); %>
+        </ul>
+        <% } else { %>
+        No articles have been added to this closet.
+        <% } %>
+    </dd>
+</dl>
+<div class="user">
+      User Name: <a rel="user" href="user.html"><span class="username">lwturpin</span></a></br>
+      Name: <div class="name">Lauren Turpin</div>
+      Email: <div class="email"><a href="lturpin@live.unc.edu"></a></div>
+</div>
+
+<div class="control">
+<h2>Update User Information</h2>
+  <form method="put" action="/user/<%item._id%>">
+   <label>Name:
+     <input name="item[name]" value="<%=item.name%>" type="text" required>
+     </label></br>
+ 	Email: <input name="email" type="text"/></br>
+ 	Username: <input name="username" type="text"/></br>
+	Password: <input name="password" type="text"/></br>
+	<input type="submit"/>
+</form>
+</div>
+
+<h2>Articles in My Closet</h2>
+<ul class="mycloset">
+  <li><!--add microdata-->
+      Name: <div class="title"><a rel="article" href="article.html">Red Rabble Sneaker</a></div>
+      Description: <div class="description">Rabble Mid-Top Canvas Sneaker</div>
+      Designer/Brand: <div class="designer">Alexander McQueen</div>
+      Color: <div class="color">red</div>
+      <a rel hidden="itemnumber" href="user/item1"></a>
+      <!--link to each article assigned to this closet-->
+      <button type="button" onclick="alert('This article has been removed from your closet')">Remove from My Closet</button>
+      <!--add Delete function here-->
+  </li>
+  </br>
+  <li>
+  	Name: <div class="title"><a rel="article" href="article.html">Color Block V Dress</a></div>
+  	Description: <div class="description">Long Blue Ivory and Red Color Block V-neck Dress</div>
+  	Designer/Brand: <div class="designer">Andree</div>
+  	Color: <div class="color">blue</div>
+  	<a rel hidden="itemnumber" href="user/"></a>
+      <!--link to each article assigned to this closet-->
+      <button type="button" onclick="alert('This article has been removed from your closet')">Remove from My Closet</button>
+      <!--add Delete function here-->
+  </li>
+  </ul>
+
+<h2>Add a New Article to My Closet</h2>
+<h3>Search for an Article</h3>
+<form name="searchcloset" action="http://virtualcloset.com/find?q{title}">
+    Name: <input name="search-title" value=""/>
+	<input type="submit"/><!--additional search options-->
+</form>
+
+<h3>Search All Articles</h3>
+<form method="GET" action="/allitems">
+  Name: <input name="name" type="text"/></br>
+  Description: <input description="description" type="text"/></br>
+  Brand: <input brand="brand" type="text"/></br>
+  Color: <input color="color" type="text"/></br>
+  <input type="submit"/></br>
+</form>
+
+</body>
+</html>
