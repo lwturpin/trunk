@@ -1,28 +1,45 @@
 <!DOCTYPE html>
 <html>
  <head>
-  <title>Trunk: <%item.name%></title>
+  <title>Trunk: <%=item.name%></title>
   <link rel="stylesheet" href="/style.css">
  </head>
 <body>
 
-<a href="/"><h1>User Information</h1></a>
-<dl>
-    <dt>User Name</dt>
-    <dd><%=item.name%></dd>
-    <% if (item.description) { %>
-    <dt>Description</dt>
-    <dd><%=item.description%></dd>
-    <% } %>
-    <dt>Articles</dt>
-    
+<a href="http://sils-webinfo.iriscouch.com/_utils/database.html?lwturpin"><h1>User Information</h1></a>
+
+<dl id="user">
+    <div itemscope itemtype="http://schema.org/Person">
+      <dt><span itemprop="additionalName">User Name</span></dt>
+        <dd><%=item.username%></dd>
+      <dt><span itemprop="givenName">Name</span></dt>
+        <dd><%=item.name%></dd>
+      <dt><span itemprop="email">Email</span></dt>
+        <dd><%=item.email%></dd>    
+    </div>    
+</dl>
+
+<div class="control">
+<h2>Update User Information</h2>
+    <form method="post" action="/users/<%=item._id%>">
+            <input type="hidden" name="_method" value="put">
+        <label>Name: <input name="item[name]" value="<%=item.name%>" type="text"</label>
+        <label>Email: <input name="item[email]" value="<%=item.email%>" type="text"></label>
+ 	    <label>Username: <input name="item[username]" value="<%=item.username%>" type="text"></label>
+	    <label>Password: <input name="item[password]" value="<%=item.password%>" type="text"></label>
+	    <button>Update</button>
+    </form>
+</div>
+
+<dl id="user-articles">
+    <dt>Articles in My Closet</dt>
     <dd>
-        <% if (related_tems.length > 0) { %>
+        <% if (related_items.length > 0) { %>
         <ul>
         <% related_items.forEach(function(related_item) { %>
         <li>
-            <a href="/allitems/<%=related_item._id%>">
-                <%=related_item.name%>
+            <a href="/user/<%=item._id%>">
+                <%=item.name%>
             </a>
         </li>
         <% }); %>
@@ -32,65 +49,18 @@
         <% } %>
     </dd>
 </dl>
-<div class="user">
-      User Name: <a rel="user" href="user.html"><span class="username">lwturpin</span></a></br>
-      Name: <div class="name">Lauren Turpin</div>
-      Email: <div class="email"><a href="lturpin@live.unc.edu"></a></div>
-</div>
 
-<div class="control">
-<h2>Update User Information</h2>
-  <form method="put" action="/user/<%item._id%>">
-   <label>Name:
-     <input name="item[name]" value="<%=item.name%>" type="text" required>
-     </label></br>
- 	Email: <input name="email" type="text"/></br>
- 	Username: <input name="username" type="text"/></br>
-	Password: <input name="password" type="text"/></br>
-	<input type="submit"/>
-</form>
-</div>
+<h2>Remove an Article from My Closet</h2>
+      <form method="post" action="/user/closet/:rev">
+            <input type="hidden" name="_method" value="put">
+            <label>Name:<input name="name" type="text"></label>
+            <button>Remove</button>
+      </form>        
 
-<h2>Articles in My Closet</h2>
-<ul class="mycloset">
-  <li><!--add microdata-->
-      Name: <div class="title"><a rel="article" href="article.html">Red Rabble Sneaker</a></div>
-      Description: <div class="description">Rabble Mid-Top Canvas Sneaker</div>
-      Designer/Brand: <div class="designer">Alexander McQueen</div>
-      Color: <div class="color">red</div>
-      <a rel hidden="itemnumber" href="user/item1"></a>
-      <!--link to each article assigned to this closet-->
-      <button type="button" onclick="alert('This article has been removed from your closet')">Remove from My Closet</button>
-      <!--add Delete function here-->
-  </li>
-  </br>
-  <li>
-  	Name: <div class="title"><a rel="article" href="article.html">Color Block V Dress</a></div>
-  	Description: <div class="description">Long Blue Ivory and Red Color Block V-neck Dress</div>
-  	Designer/Brand: <div class="designer">Andree</div>
-  	Color: <div class="color">blue</div>
-  	<a rel hidden="itemnumber" href="user/"></a>
-      <!--link to each article assigned to this closet-->
-      <button type="button" onclick="alert('This article has been removed from your closet')">Remove from My Closet</button>
-      <!--add Delete function here-->
-  </li>
-  </ul>
+<h2>Update or Add a New Article to My Closet</h2>
+<p>To add or update an article, use the <a href="/allitems/">global inventory</a> to select an individual article.</p>
 
-<h2>Add a New Article to My Closet</h2>
-<h3>Search for an Article</h3>
-<form name="searchcloset" action="http://virtualcloset.com/find?q{title}">
-    Name: <input name="search-title" value=""/>
-	<input type="submit"/><!--additional search options-->
-</form>
-
-<h3>Search All Articles</h3>
-<form method="GET" action="/allitems">
-  Name: <input name="name" type="text"/></br>
-  Description: <input description="description" type="text"/></br>
-  Brand: <input brand="brand" type="text"/></br>
-  Color: <input color="color" type="text"/></br>
-  <input type="submit"/></br>
-</form>
+<a href="/">Home</a>
 
 </body>
 </html>
