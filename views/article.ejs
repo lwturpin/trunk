@@ -1,37 +1,77 @@
 <!DOCTYPE html>
 <html>
  <head>
-    <title>Trunk: <%=item.name%></title>
+    <title>Article: <%=item.name%></title>
     <link rel="stylesheet" href="/style.css">
  </head>
+ 
 <body>
+<a href="http://sils-webinfo.iriscouch.com/_utils/database.html?lwturpin"><h1>Article</h1></a>
 
-<a href="/"><h1>Article</h1></a>
-<dl>
-    <dt>Name</dt>
-    <dd><%=item.name%></dd>
-    <dt>Article</dt>
-    <dd><a href="/allitems/<%=item.article%>"><%=item.article%></a></dd>
-    <% if (item.image) { %>
-    <dt>Image URL</dt>
-    <dd><img src="<%=item.image%>" alt"<%=item.name%>"></dd>
-    <% } %>
+<dl id="article">
+    <div itemscope itemtype="http://schema.org/Product">
+      <dt><span itemprop="productID">ID</span></dt>
+        <dd><%=item.id%></dd>
+      <dt><span itemprop="name">Name</span></dt>
+        <dd><%=item.name%></dd>
+      <dt><span itemprop="description">Description</span></dt>
+        <dd><%=item.description%></dd>
+      <dt><span itemprop="brand">Brand</span></dt>
+        <dd><%=item.brand%></dd>
+      <dt><span itemprop="url">URL</span></dt>
+        <dd><%=item.url%></dd>
+      <dt><span itemprop="color">Color</span></dt>
+        <dd><%=item.color%></dd>
+    </div>
 </dl>
-<div itemscope itemtype="http://schema.org/Product">
-  ID: <span itemprop="productID">1</span></br>
-  Name: <span itemprop="name">Red Rabble Sneaker</span></br>
-  Description: <span itemprop="description">Rabble Mid-Top Canvas Sneaker</span></br>
-  Brand: <span itemprop="brand"><a href="www.alexandermcqeen.com">Alexander McQueen</a></span></br>
-  Color: <span itemprop="color">Red</span></br>
+
+<div class="control">
+    <h2>Add to My Closet</h2>
+    <script>
+      function onFormSubmit(form) {
+        form.action = form.action + form.elements['item[id]'].value;
+        console.log(form.action);
+        return true;
+      } 
+    </script>
+    <form id="add-userarticle" method="post" action="/user/closet/">
+        <input type="hidden" name="item[id]" value="<%=item._id%>">
+        Username<input type="text" name="username">
+        <button>Add</button>
+    </form>    
+</div>    
+
+<div class="control">
+    <h2>Update Article</h2>
+    <form method="post" action="/allitems/<%=item._id%>">
+            <input type="hidden" name="_method" value="put">
+        <label>Name: <input name="item[name]" value="<%=item.name%>" type="text"></label>
+        <label>Description: <input name="item[description]" value="<%=item.description%>" type="text"></label>
+        <label>Brand: <input name="item[brand]" value="<%=item.brand%>" type="text"></label>
+     <label>URL: <input name="item[url]" value="<%=item.url%>" type="text"></label>
+        <label>Color: <input name="item[color]" value="<%=item.color%>" type="text"></label>
+	    <button>Update</button>
+    </form>
 </div>
 
-<h3>Owners</h3>
-<div itemscope itemtype="http://schema.org/Thing">
-  <a rel="user" href="user/{username}.html"><span class="username">lwturpin</span></a></br>
-  <a rel="user" href="user/{username}.html"><span class="username">rshaw</span></a>
+<div id="control">
+<h2>Owners</h2></a>
+         <% if (related_items.length > 0) { %>
+        <ul>
+          <% related_items.forEach(function(related_item) { %>
+          <li>
+            <a href="/users/<%=related_item._id%>">
+              <%=related_item.name%>
+            </a>
+          </li>
+          <% }); %>
+        </ul>
+        <% } else { %>
+        No users have this article.
+        <% } %>
 </div>
 
-
+<a href="/">Home</a>
 
 </body>
 </html>
