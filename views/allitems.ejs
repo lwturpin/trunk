@@ -1,64 +1,53 @@
 <!DOCTYPE html>
 <html>
-<meta charset="utf-8">
-<title>all items</title>
+<head>
+    <title>Trunk: All Articles</title>
+    <link rel="stylesheet" href="/style.css">
+</head>    
 <body>
 
-<h2>All Articles</h2>
-<ul class="all">
-  <li>
-  <div itemscope itemtype="http://schema.org/Product">
-  Name: <span itemprop="name"><a rel="article" href="article.html">Red Rabble Sneaker</a></span></br>
-  Description: <span itemprop="description">Rabble Mid-Top Canvas Sneaker</span></br>
-  Brand: <span itemprop="brand"><a href="www.alexandermcqueen.com">Alexander McQueen</a></span></br>
-  Color: <span itemprop="color">Red</span></br>
-  <button type="button" onclick="alert('This article has been added to your closet')">Add to My Closet
-    <form method="POST" action="user/">
-    </form>
-  </button>
-  </br>
-  <h3>Users who have this Article</h3>
-<form method="GET" action="/usersearch" action="http://virtualcloset.com/find?q{title}">
-</form>
-  
-</div>
-  </li>
- </br>
- <li>
-    <div itemscope itemtype="http://schema.org/Product">
-    Name: <span itemprop="name"><a rel="article" href="article.html">Striped Shirt</a></span></br>
-    Description: <span itemprop="description">Cotton-blend shirt from Issey Miyake featuring a classic collar, a front button fastening, a black vertical-striped design and long sleeves.</span></br>
-    Brand: <span itemprop="brand"><a href="http://www.isseymiyake.com/en/">Issey Miyake</a></span></br>
-    Color: <span itemprop="color">White</span></br>
-    <button type="button" onclick="alert('This article has been added to your closet')">Add to My Closet
-    <form method="POST" action="user/">
-    </form>
-    </button>
-    </div>
-  </li>
-</ul>
+<a href="http://sils-webinfo.iriscouch.com/_utils/database.html?lwturpin"><h1>All Articles</h1></a>
+    <% if (items.length > 0) { %>
+    <ul id="allitems">
+      <% items.forEach(function(item) { %>
+      <li class="article"><a href="/allitems/<%=item._id%>"><%=item.name%></a></li>
+      <% }); %>
+    </ul>
+    <% } else { %>
+    <div>No articles found.</div>
+    <% } %>
 
-
+<div class="control">    
+    <h3>Search All Articles by Brand</h3>
+    <form id="search-brand" method="get" action="/allitems/:brand">
+        <label>Brand: <input name="brand"></label>
+        <button>Search</button>
+    </form>
+</div> 
 
 <div class="control">
     <h2>Add a New Article to the Closet Inventory</h2>
-    <form id="create-article" method="post" action="/allitems"/>
-        <input type="hidden" name="item[article]" value="<%item._id%>">
+    <form id="create-article" method="post" action="/allitems/">
         <label>Name:
-            <input name="item[image]" type="text" required
-        </label></br>
+            <input name="item[name]" type="text" required>
+        </label>
         <label>Description:
-            <input name="item[description]" type="text" required
-        </label></br>
+            <input name="item[description]" rows="4" cols="50"" >
+        </label>
         <label>Brand:
-            <input name="item[brand]" type="text" required
-        </label></br>
+            <input name="item[brand]" type="text" required>
+        </label>
+        <label>Brand URL:
+            <input name="item[url]" type="text">
+        </label>    
         <label>Color:
-            <input name="item[color]" type="text" required
+            <input name="item[color]" type="text" required>
         </label></br>
         <button>Add</button>
     </form>    
 </div>
+
+<a href="/">Home</a>
 
 </body>
 </html>
