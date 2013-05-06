@@ -5,53 +5,15 @@
         <link rel="stylesheet" href="/style.css">
     </head>
 
-    <body>
-        <div id="display"></div>
-        <button id="articles-button" class="toggle" type="button">View Articles</button>
-        <button id="users-button" class="toggle" type="button">View Users</button>
-        <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-        <script>
-            var loaded = null;
-            function load(path) {
-                if (path === loaded) {return; }
-                $.get(path, function (data) {
-                    loaded = path;
-                    $('#display').html(data);
-                    $('.toggle').toggle();
-                    $("a").click(onLinkClick);
-                    $("form").submit(onFormSubmit);
-                });
-            }
-            function onLinkClick(click) {
-                click.preventDefault();
-                var href = $(this).attr('href');
-                if (href == '/') { load('/users/'); }
-                else { load(href); }
-            }
-            function onFormSubmit(submit) {
-                submit.preventDefault();
-                var form = $(this);
-                var o = {
-                    url: form.attr('action'),
-                    type: form.attr('method'),
-                    data: form.serialize(),
-                    success: function(data, status, xhr) {
-                        if (status == 'success') {
-                            load(xhr.getResponseHeader('Location'));
-                        } else {
-                            $('#display').html('<span class="error">Hmmm... something broke.</span>');
-                        }
-                    }
-                };
-                if (o.type == 'put' && 'item[id]' in this.element) {
-                    o.url += this.elements['item[id]'].value;
-                    o.data = o.data.split('&').slice(1).join('&');
-                }
-                $.ajax(o);
-            }
-            load('/users/');
-            $('#users-button').click(function() { load('/users/'); });
-            $('#articles-button').hide().click(function() {load('/allitems/'); });
-        </script>
-    </body>
+  <body>
+    <a rel="http://sils-webinfo.iriscouch.com/_utils/database.html?lwturpin"><h1>Trunk</h1></a>
+    <div>
+      <a href="/users/"><h2>List of Users</h2></a>
+    <div>
+    <div>
+      <a href="/allitems/"><h2>List of Articles</h2></a>
+    <div>
+  </body>
 </html>
+
+    
