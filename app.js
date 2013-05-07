@@ -49,7 +49,7 @@ app.put('/users/:id',      // TODO: change to suit your URI design.
       if (err) { res.send(err, 500); } 
       
       // Otherwise, send back the location of the created/updated item.
-      else { res.send('', { Location: '/parties/' + item_id }, 204); }
+      else { res.redirect('back' ); }
     });
   }
 );
@@ -58,7 +58,29 @@ app.put('/users/:id',      // TODO: change to suit your URI design.
 // Example of handling GET of a "collection" resource. /////////////////////////
 // Here we list all items of type `party`. /////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-app.get('/articles/',         // TODO: change to suit your URI design. 
+app.get('/users/',         // TODO: change to suit your URI design. 
+  function(req, res) {
+
+    var item_type = 'user'; // TODO: change to the type of item you want.
+
+    // Get all items of the specified type from the database.
+    db.getAll(item_type, function(err, items) {
+
+      // If there was a database error, return an error status.
+      if (err) { res.send(err, 500); } 
+
+      // Otherwise, use the returned data to render an HTML page.
+      else {
+        res.render(
+          'users',   // TODO: change to the name of your HTML template.
+          { items: items }
+        );
+      }
+    });
+  }
+);
+
+app.get('/allitems/',         // TODO: change to suit your URI design. 
   function(req, res) {
 
     var item_type = 'article'; // TODO: change to the type of item you want.
@@ -72,7 +94,7 @@ app.get('/articles/',         // TODO: change to suit your URI design.
       // Otherwise, use the returned data to render an HTML page.
       else {
         res.render(
-          'list-articles',   // TODO: change to the name of your HTML template.
+          'allitems',   // TODO: change to the name of your HTML template.
           { items: items }
         );
       }
@@ -84,7 +106,28 @@ app.get('/articles/',         // TODO: change to suit your URI design.
 // Example of handling POST to create a resource. //////////////////////////////
 // Here we create an item and allow the ID to be created automatically. ////////
 ////////////////////////////////////////////////////////////////////////////////
-app.post('/articles/', // TODO: change to suit your URI design.
+app.post('/users/', // TODO: change to suit your URI design.
+  function(req, res) {
+  
+    // Get the item info that was POSTed from the input form.
+    // See the form in `views/one-party.ejs`.
+    var item = req.body.item;
+
+    item.type = 'user'; // TODO: change to the type of item you want
+
+    // Save the new item to the database. (No ID specified, it will be created.)
+    db.save(item, function(err, item) {
+
+      // If there was a database error, return an error status.
+      if (err) { res.send(err, 500); } 
+      
+      // Otherwise, send back the location of the created item.
+      else { res.redirect('back' ); }
+    });
+  }
+);
+
+app.post('/allitems/', // TODO: change to suit your URI design.
   function(req, res) {
   
     // Get the item info that was POSTed from the input form.
@@ -94,13 +137,61 @@ app.post('/articles/', // TODO: change to suit your URI design.
     item.type = 'article'; // TODO: change to the type of item you want
 
     // Save the new item to the database. (No ID specified, it will be created.)
+    db.save(item, function(err) {
+
+      // If there was a database error, return an error status.
+      if (err) { res.send(err, 500); } 
+      
+      // Otherwise, send back the location of the created item.
+      else { res.redirect('back' ); }
+    });
+  }
+);
+
+app.post('/user/:username', // TODO: change to suit your URI design.
+  function(req, res) {
+  
+    // Get the item info that was POSTed from the input form.
+    // See the form in `views/one-party.ejs`.
+    var item = req.body.item;
+    
+    req.query.username = req.params.username;
+    
+    db.getSome('user', req.query, function(err, users) {
+        if (err) { res.send(err, 500); }
+        else {
+            var user = users[0];
+            if (! user.items) { user.items = []; }
+            user.items.push(item.id);
+
+            // Save the new item to the database. (No ID specified, it will be created.)
+            db.save(user, function(err, item) {
+
+                // If there was a database error, return an error status.
+                if (err) { res.send(err, 500); } 
+                else { res.redirect('back' ); }
+            });
+        }
+    });
+});
+
+app.post('/user/closet/', // TODO: change to suit your URI design.
+  function(req, res) {
+  
+    // Get the item info that was POSTed from the input form.
+    // See the form in `views/one-party.ejs`.
+    var item = req.body.item;
+
+    item.type = 'user'; // TODO: change to the type of item you want
+
+    // Save the new item to the database. (No ID specified, it will be created.)
     db.save(item, function(err, item) {
 
       // If there was a database error, return an error status.
       if (err) { res.send(err, 500); } 
       
       // Otherwise, send back the location of the created item.
-      else { res.send('', { Location: '/candidates/' + item.id }, 204); }
+      else { res.redirect('back' ); }
     });
   }
 );
@@ -109,7 +200,7 @@ app.post('/articles/', // TODO: change to suit your URI design.
 // Another example of handling PUT to update a resource. ///////////////////////
 // Here we update an item using the ID specified in the URI. ///////////////////
 ////////////////////////////////////////////////////////////////////////////////
-app.put('/articles/:id', // TODO: change to suit your URI design.
+app.put('/allitems/:id', // TODO: change to suit your URI design.
   function(req, res) {
   
     // Get the item ID from the URI.
@@ -128,16 +219,39 @@ app.put('/articles/:id', // TODO: change to suit your URI design.
       if (err) { res.send(err, 500); } 
       
       // Otherwise, send back the location of the updated item.
-      else { res.send('', { Location: '/candidates/' + item_id }, 204); }
+      else { res.redirect('back' ); }
     });
   }
 );
 
+app.put('/user/closet/:rev', // TODO: change to suit your URI design.
+  function(req, res) {
+  
+    // Get the item ID from the URI.
+    var item_rev = req.params.id;
+
+    // Get the item info that was PUT from the input form.
+    // See the form in `views/one-candidate.ejs`.
+    var item = req.body.item;
+
+    item.type = 'article'; // TODO: change to the type of item you want
+
+    // Remove the item from the database, specifying the ID.
+    db.remove(item_rev, item, function(err) {
+
+      // If there was a database error, return an error status.
+      if (err) { res.send(err, 500); } 
+      
+      // Otherwise, send back the location of the updated item.
+      else { res.redirect('back' ); }
+    });
+  }
+);
 ////////////////////////////////////////////////////////////////////////////////
 // Another example of handling GET of a "collection" resource. /////////////////
 // This time we support filtering the list by some criteria (i.e. searching). //
 ////////////////////////////////////////////////////////////////////////////////
-app.get('/articles/',          // TODO: change to suit your URI design. 
+app.get('/allitems/',          // TODO: change to suit your URI design. 
   function(req, res) {
 
     var item_type = 'article'; // TODO: change to the type of item you want.
@@ -151,7 +265,7 @@ app.get('/articles/',          // TODO: change to suit your URI design.
       // Otherwise, use the returned data to render an HTML page.
       else {
         res.render(
-          'list-articles', // TODO: change to the name of your HTML template.
+          'allitems', // TODO: change to the name of your HTML template.
           { items: items }
         );
       }
@@ -164,7 +278,7 @@ app.get('/articles/',          // TODO: change to suit your URI design.
 // This handler is more complicated, because we want to show not only the //////
 // item requested, but also links to a set of related items. ///////////////////
 ////////////////////////////////////////////////////////////////////////////////
-app.get('/articles/:id',      // TODO: change to suit your URI design.
+app.get('/allitems/:id',      // TODO: change to suit your URI design.
   function(req, res) {
 
     var item_type = 'article'; // TODO: change to the type of item you want.
@@ -184,10 +298,10 @@ app.get('/articles/:id',      // TODO: change to suit your URI design.
       // Otherwise, get the related items associated with this item.
       else {
         
-        var related_type = 'article'; // TODO: change to type of related item.
+        var related_type = 'user'; // TODO: change to type of related item.
 
         // Set our query to find the items related to the requested item.
-        req.query.party = item_id; // TODO: change `party` to reflect the
+        req.query.article = item_id; // TODO: change `party` to reflect the
                                    // relation between the item fetched above
                                    // and the related items to be fetched below.
 
@@ -200,7 +314,7 @@ app.get('/articles/:id',      // TODO: change to suit your URI design.
           // Otherwise, use the returned data to render an HTML page.
           else {
             res.render(
-            'one-article', // TODO: change to the name of your HTML template.
+            'article', // TODO: change to the name of your HTML template.
               { item: item, related_items: items }
             );
           }
@@ -247,7 +361,7 @@ app.get('/users/:id',       // TODO: change to suit your URI design.
           // Otherwise, use the returned data to render an HTML page.
           else {
             res.render(
-              'one-user', // TODO: change to name of your HTML template.
+              'user', // TODO: change to name of your HTML template.
               { item: item, related_items: items }
             );
           }
@@ -257,6 +371,47 @@ app.get('/users/:id',       // TODO: change to suit your URI design.
   }
 );
 
+app.get('/users/:email',       // TODO: change to suit your URI design.
+  function(req, res) {
+
+    var item_type = 'user'; // TODO: change to the type of item you want.
+
+    // Get the item ID from the URI.
+    var item_email = req.params.email;
+  
+    // Get one item of the specified type, identified by the item ID.
+    db.getOne(item_type, item_email, function(err, item) {
+        
+      // If there was a database error, return an error status.
+      if (err) {
+        if (err.error == 'not_found') { res.send(404); }
+        else { res.send(err, 500); }
+      } 
+    }
+  );
+}  
+);
+
+app.get('/article/:brand',       // TODO: change to suit your URI design.
+  function(req, res) {
+
+    var item_type = 'article'; // TODO: change to the type of item you want.
+
+    // Get the item ID from the URI.
+    var item_brand = req.params.brand;
+  
+    // Get one item of the specified type, identified by the item ID.
+    db.getOne(item_type, item_brand, function(err, item) {
+        
+      // If there was a database error, return an error status.
+      if (err) {
+        if (err.error == 'not_found') { res.send(404); }
+        else { res.send(err, 500); }
+      } 
+    }
+  );
+}  
+);
 
 // Handle GET of the "index" resource.
 app.get('/', function(req, res) { res.render('index'); });
