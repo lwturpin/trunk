@@ -40,6 +40,10 @@ function connectToDatabase(name) {
         var args = arguments;
         db.save.apply(db, args); 
       };
+      this.remove = function() {
+          var args = arguments;
+          db.remove.apply(db, args);
+      };
       this.filterDocs = function (accept, callback) {
         var that = this;
         db.all({ include_docs: true }, function(err, rows) {
@@ -60,6 +64,11 @@ function connectToDatabase(name) {
           if (doc.type !== item_type ) { return false; }
           for (var prop in query) {
             if (prop in doc) {
+                if (Array.isArray(doc.doc[prop])) {
+                    if (doc.doc[prop].indexOf(query[prop]) < 0) {
+                        return false;
+                    }   
+                } else {
               if (typeof(query[prop]) == 'string') {
                 if (doc[prop].toLowerCase().indexOf(query[prop].toLowerCase()) < 0) {
                   return false;
@@ -71,6 +80,7 @@ function connectToDatabase(name) {
               }
             }
           }
+          }  
           return true;
         }, callback);
       };
